@@ -58,7 +58,6 @@ func (h *handlerAuth) Register(w http.ResponseWriter, r *http.Request) {
 		Email:    request.Email,
 		Password: password,
 		ListAsID: request.ListAsID,
-		ListAs:   request.ListAs,
 		Gender:   request.Gender,
 		Address:  request.Address,
 	}

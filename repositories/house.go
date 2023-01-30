@@ -10,8 +10,8 @@ type HouseRepository interface {
 	FindHouse() ([]models.House, error)
 	GetHouse(ID int) (models.House, error)
 	CreateHouse(house models.House) (models.House, error)
-	// UpdateUser(user models.User) (models.User, error)
-	// DeleteUser(user models.User) (models.User, error)
+	UpdateHouse(house models.House) (models.House, error)
+	DeleteHouse(house models.House) (models.House, error)
 }
 
 func RepositoryHouse(db *gorm.DB) *repository {
@@ -38,14 +38,14 @@ func (r *repository) CreateHouse(house models.House) (models.House, error) {
 	return house, err
 }
 
-// func (r *repository) UpdateUser(user models.User) (models.User, error) {
-// 	err := r.db.Save(&user).Error
+func (r *repository) UpdateHouse(house models.House) (models.House, error) {
+	err := r.db.Save(&house).Error
 
-// 	return user, err
-// }
+	return house, err
+}
 
-// func (r *repository) DeleteUser(user models.User) (models.User, error) {
-// 	err := r.db.Delete(&user).Error
+func (r *repository) DeleteHouse(house models.House) (models.House, error) {
+	err := r.db.Delete(&house).Error
 
-// 	return user, err
-// }
+	return house, err
+}
