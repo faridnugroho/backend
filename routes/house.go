@@ -2,6 +2,7 @@ package routes
 
 import (
 	"housy/handlers"
+	// "housy/pkg/middleware"
 	"housy/pkg/mysql"
 	"housy/repositories"
 
@@ -17,4 +18,5 @@ func HouseRoutes(r *mux.Router) {
 	r.HandleFunc("/house", h.CreateHouse).Methods("POST")
 	r.HandleFunc("/house/{id}", h.UpdateHouse).Methods("PATCH")
 	r.HandleFunc("/house/{id}", h.DeleteHouse).Methods("DELETE")
+	// r.HandleFunc("/house", middleware.Auth(h.CreateHouse)).Methods("POST")
 }

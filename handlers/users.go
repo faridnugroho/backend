@@ -6,6 +6,7 @@ import (
 	dto "housy/dto/result"
 	usersdto "housy/dto/users"
 	"housy/models"
+	"housy/pkg/bcrypt"
 	"housy/repositories"
 	"net/http"
 	"strconv"
@@ -118,6 +119,13 @@ func (h *handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	password, err := bcrypt.HashingPassword(request.Password)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		response := dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()}
+		json.NewEncoder(w).Encode(response)
+	}
+
 	if request.Fullname != "" {
 		user.Fullname = request.Fullname
 	}
@@ -130,8 +138,8 @@ func (h *handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		user.Email = request.Email
 	}
 
-	if request.Password != "" {
-		user.Password = request.Password
+	if password != "" {
+		user.Password = password
 	}
 
 	// if request.ListAsID != "" {

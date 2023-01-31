@@ -17,6 +17,8 @@ type handlerhouse struct {
 	HouseRepository repositories.HouseRepository
 }
 
+// var path_file = "http://localhost:5000/uploads/"
+
 func HandlerHouse(HouseRepository repositories.HouseRepository) *handlerhouse {
 	return &handlerhouse{HouseRepository}
 }
@@ -29,6 +31,10 @@ func (h *handlerhouse) FindHouse(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(err.Error())
 	}
+
+	// for i, p := range house {
+	// 	house[i].Image = path_file + p.Image
+	// }
 
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Code: http.StatusOK, Data: house}
@@ -48,6 +54,8 @@ func (h *handlerhouse) GetHouse(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// house.Image = path_file + house.Image
+
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Code: http.StatusOK, Data: house}
 	json.NewEncoder(w).Encode(response)
@@ -55,6 +63,12 @@ func (h *handlerhouse) GetHouse(w http.ResponseWriter, r *http.Request) {
 
 func (h *handlerhouse) CreateHouse(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+
+	// userInfo := r.Context().Value("userInfo").(jwt.MapClaims)
+	// userId := int(userInfo["id"].(float64))
+
+	// dataContex := r.Context().Value("dataFile")
+	// filename := dataContex.(string)
 
 	request := new(housedto.CreateHouseRequest)
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
@@ -83,6 +97,8 @@ func (h *handlerhouse) CreateHouse(w http.ResponseWriter, r *http.Request) {
 		Ameneties: request.Ameneties,
 		BedRoom:   request.BedRoom,
 		BathRoom:  request.BathRoom,
+		// Image:     filename,
+		// UserID: userId,
 	}
 
 	data, err := h.HouseRepository.CreateHouse(house)
@@ -92,6 +108,8 @@ func (h *handlerhouse) CreateHouse(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(response)
 		return
 	}
+
+	data, _ = h.HouseRepository.GetHouse(data.ID)
 
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Code: http.StatusOK, Data: data}
